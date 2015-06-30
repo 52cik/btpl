@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>过滤器的使用</title>
+    <style>
+        span{padding-right: 2em;}
+    </style>
+</head>
+<body>
+
+<div id="view"></div>
+
+<script id="list" type="text/tpl">
+<h1>{{d.title}}</h1>
+<p>{{d.desc || "暂无描述"}}</p>
+<ul>
+    {{@ d.list}}
+    <li>
+        <span>{{i}}</span>
+        <span>昵称: {{val.name|test}}</span>
+        <span>城市: {{val.city}}</span>
+        <span>职位: {{val.post}}</span>
+        <span>时间: {{val.time | date:"yyyy-MM-dd" | test}}</span>
+    </li>
+    {{@}}
+</ul>
+</script>
+
+
+<script src="../bt.js"></script>
+<script>
+var data = {
+    title: "前端屌丝群成员",
+    list: [
+        {name: "乱码",       city: "杭州", post: "前端", time: 1435650377},
+        {name: "冰花",       city: "北京", post: "水军", time: 1435650377},
+        {name: "高琦",       city: "福建", post: "水军", time: 1435650377},
+        {name: "银狐",       city: "汕头", post: "前端", time: 1435650377},
+        {name: "辛巴",       city: "深圳", post: "前端", time: 1435650377},
+        {name: "龙秋明",     city: "北京", post: "前端", time: 1435650377},
+        {name: "小麒麟",     city: "北京", post: "前端", time: 1435650377},
+        {name: "秋天的落叶", city: "广东", post: "前端", time: 1435650377}
+        
+    ]
+};
+
+// 先注册过滤器，然后使用。
+// 为字符加上中括号
+bt.filter("test", function (str) {
+    return "[" + str + "]";
+});
+
+// 时间格式化 这个代码是网上随便找的。。
+bt.filter("date", function (str, fmt) { //author: meizz 
+    if (!str) return str;
+
+    var dt = new Date(str*1000);
+    var o = {
+        "M+": dt.getMonth() + 1, //月份 
+        "d+": dt.getDate(), //日 
+        "h+": dt.getHours(), //小时 
+        "m+": dt.getMinutes(), //分 
+        "s+": dt.getSeconds(), //秒 
+        "q+": Math.floor((dt.getMonth() + 3) / 3), //季度 
+        "S": dt.getMilliseconds() //毫秒 
+    };
+    if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (dt.getFullYear() + "").substr(4 - RegExp.$1.length));
+    for (var k in o)
+    if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+    return fmt;
+});
+
+// 得到模版
+var tpl = document.getElementById("list").innerHTML;
+document.getElementById("view").innerHTML = bt(tpl).render(data);
+</script>
+</body>
+</html>

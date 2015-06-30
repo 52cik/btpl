@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>基础测试</title>
+</head>
+<body>
+
+<div id="view"></div>
+
+<script id="tpl" type="text/tpl">
+<p>输出字符串：{{ d.str }}</p>
+<p>输出数字：{{ d.num }}</p>
+<p>输出html：{{ d.html }}</p>
+<p>输出html(转义)：{{= d.html }}</p>
+<p>输出数组(直接输出)：{{ d.list }}</p>
+<p>输出数组(迭代输出)：{{@ d.list v}} <em>{{v}}</em> {{@}}</p>
+<p>输出默认值: {{ d.abc || "该值不存在，我是默认值" }}</p>
+</script>
+
+<script src="../bt.js"></script>
+<script>
+var data = {
+    str: "字符串数据",
+    num: 123456,
+    html: "<u>html代码</u> <em>em</em>",
+    list: [1,2,3,4, "字符"]
+};
+
+bt.filter("test", function (s) { return s});
+
+// 得到模版
+var tpl = document.getElementById("tpl").innerHTML;
+document.getElementById("view").innerHTML = bt(tpl).render(data);
+</script>
+</body>
+</html>

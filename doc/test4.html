@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>过滤器技巧当作组件使用</title>
+    <style>
+        span{padding-right: 2em;}
+    </style>
+</head>
+<body>
+
+<div id="view"></div>
+
+<script id="list" type="text/tpl">
+<h1>{{d.title}}</h1>
+<p>{{d.desc || "暂无描述"}}</p>
+<ul>
+    {{@ d.list}}
+    <li>
+        <span>{{i}}</span>
+        <span>昵称: {{val.name}}</span>
+        <span>{{val.id|test}}<span>
+    </li>
+    {{@}}
+</ul>
+</script>
+
+
+<script id="opts" type="text/tpl">
+<a href="view-{{d}}.html">查看</a>
+|
+<a href="delete-{{d}}.html">删除</a>
+|
+<a href="other-{{d}}.html">其他操作</a>
+</script>
+
+
+<script src="../bt.js"></script>
+<script>
+var data = {
+    title: "前端屌丝群成员",
+    list: [
+        {id:11, name: "乱码",       city: "杭州"},
+        {id:22, name: "冰花",       city: "北京"},
+        {id:33, name: "高琦",       city: "福建"},
+        {id:44, name: "银狐",       city: "汕头"},
+        {id:55, name: "辛巴",       city: "深圳"},
+        {id:66, name: "龙秋明",     city: "北京"},
+        {id:77, name: "小麒麟",     city: "北京"},
+        {id:88, name: "秋天的落叶", city: "广东"}
+    ]
+};
+
+// 先注册过滤器，然后使用。
+// 生成 查看 删除 链接
+var opts = bt(document.getElementById("opts").innerHTML, {});
+bt.filter("test", function (id) {
+    return opts.render(id);
+});
+
+// 得到模版
+var tpl = document.getElementById("list").innerHTML;
+document.getElementById("view").innerHTML = bt(tpl).render(data);
+</script>
+</body>
+</html>

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>循环与迭代</title>
+    <style>
+        span{padding-right: 2em;}
+    </style>
+</head>
+<body>
+
+<div id="view"></div>
+
+<script id="list" type="text/tpl">
+<h1>{{d.title}}</h1>
+<p>{{d.desc || "暂无描述"}}</p>
+<ul>
+    {{# for (var i=0; i < d.list.length; i++) { }}
+    <li>
+        <span>{{i}}</span>
+        <span>昵称: {{d.list[i].name}}</span>
+        <span>城市: {{d.list[i].city}}</span>
+        <span>职位: {{d.list[i].post}}</span>
+    </li>
+    {{# } }}
+</ul>
+</script>
+
+
+<script src="../bt.js"></script>
+<script>
+var data = {
+    title: "前端屌丝群成员",
+    list: [
+        {name: "乱码",       city: "杭州", post: "前端"},
+        {name: "冰花",       city: "北京", post: "水军"},
+        {name: "高琦",       city: "福建", post: "水军"},
+        {name: "银狐",       city: "汕头", post: "前端"},
+        {name: "辛巴",       city: "深圳", post: "前端"},
+        {name: "龙秋明",     city: "北京", post: "前端"},
+        {name: "小麒麟",     city: "北京", post: "前端"},
+        {name: "秋天的落叶", city: "广东", post: "前端"}
+        
+    ]
+};
+
+// 得到模版
+var tpl = document.getElementById("list").innerHTML;
+document.getElementById("view").innerHTML = bt(tpl).render(data);
+</script>
+</body>
+</html>

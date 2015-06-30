@@ -1,0 +1,407 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8"/>
+<title>js模版引擎性能测试</title>
+<link href="http://res.sentsin.com/css/xu.css" type="text/css" rel="stylesheet" />
+<link href="http://sentsin.com/layui/laytpl/demo.css" type="text/css" rel="stylesheet" />
+
+<script src="http://aui.github.io/artTemplate/test/js/jquery-1.7.2.min.js"></script>
+<script src="http://aui.github.io/artTemplate/test/js/highcharts.js"></script>
+<script src="http://aui.github.io/artTemplate/test/js/kissy.js"></script>
+
+<script src="http://res.sentsin.com/lay/lib/laytpl/laytpl.js"></script>
+<script src="http://aui.github.io/artTemplate/dist/template-native.js"></script>
+<script src="http://aui.github.io/artTemplate/test/js/juicer.js"></script>
+<script src="http://aui.github.io/artTemplate/test/js/doT.js"></script>
+<script src="http://aui.github.io/artTemplate/test/js/mustache.js"></script>
+<script src="http://aui.github.io/artTemplate/test/js/handlebars.js"></script>
+<script src="http://aui.github.io/artTemplate/test/js/baiduTemplate.js"></script>
+<script src="http://aui.github.io/artTemplate/test/js/template.js"></script>
+<script src="../bt.min.js"></script>
+</head>
+<body>
+<div class="laybanner">
+    <div class="box">
+        <h1 title="laytpl - JavaScript模板引擎">laytpl - JavaScript模板引擎</h1>
+    </div>
+</div>
+
+<div class="laynav">
+    <div class="box">
+        <a href="http://sentsin.com/layui/laytpl/">首页</a>
+        <a href="test.html" class="thianav">性能测试</a>
+        <a href="http://say.sentsin.com/home-45.html" target="_blank">有问必答</a>
+        <a href="http://sentsin.com/" target="_blank">贤心博客</a>
+    </div>
+</div>
+
+<div class="laymain">
+    <div class="box testspeed">
+        <h2 style="margin-top:0;">引擎渲染速度测试 - 功能由artTemplate的作者糖饼提供</h2>
+        <p style="margin-bottom:10px;"><em>PS: 该测试页面由贤心所写，我偷懒直接拿来了，导航保留大家可以去看看心姐的博客哦</em></p>
+        <p class="laytext">
+            <input id="lens" value="1000"></em> 条数据 × <input id="nums" value="1000"> 次渲染测试 [escape: false, cache: true]。
+        </p>
+        <p class="laytext">建议在拥有 v8 JavaScript 引擎的 Chrome 浏览器上进行测试，避免浏览器停止响应。</p>
+
+        <div style="margin-top:10px; text-align:center"><button id="run">开始测试</button></div>
+        <div id="log"></div>
+        <div id="container" style="min-width: 400px; margin: 0 auto"></div>
+    </div>
+</div>
+
+<script>
+
+// 待测试的引擎列表
+var testList =  [
+    
+    {
+        name: 'artTemplate',
+        tester: function () {
+            template.config('escape', false);
+            var source = document.getElementById('template').innerHTML;
+            var fn = template.compile(source);
+            for (var i = 0; i < number; i ++) {
+                fn(data)
+            }
+        }
+    },
+    
+    {
+        name: 'laytpl',
+        tester: function () {
+            var source = document.getElementById('laytpl').innerHTML;
+            var tpl = laytpl(source);
+            for (var i = 0; i < number; i ++) {
+                tpl.render(data)
+            }
+        }
+    },
+    
+    {
+        name: 'bt',
+        tester: function () {
+            var source = document.getElementById('laytpl').innerHTML;
+            var tpl = bt(source);
+            for (var i = 0; i < number; i ++) {
+                tpl.render(data)
+            }
+        }
+    },
+    
+    {
+        name: 'juicer',
+        tester: function () {
+            var config = {cache:true};
+
+            var source = document.getElementById('juicer').innerHTML;
+            for (var i = 0; i < number; i ++) {
+                juicer.to_html(source, data, config);
+            }
+        }
+    },
+    
+    {
+        name: 'doT',
+        tester: function () {
+            var source = document.getElementById('doT').innerHTML;
+            var doTtmpl = doT.template(source);
+            for (var i = 0; i < number; i ++) {
+                doTtmpl(data);
+            }
+        }
+    },
+    
+    {
+        name: 'Mustache',
+        tester: function () {
+            var source = document.getElementById('Mustache').innerHTML;
+            for (var i = 0; i < number; i ++) {
+                Mustache.to_html(source, data);
+            }
+        }
+    },
+    
+    {
+        name: 'Handlebars',
+        tester: function () {
+            var source = document.getElementById('Handlebars').innerHTML;
+            var fn = Handlebars.compile(source);
+            for (var i = 0; i < number; i ++) {
+                fn(data);
+            }
+        }
+    },
+    
+    {
+        name: 'baiduTemplate',
+        tester: function () {
+            var bt=baidu.template;
+            bt.ESCAPE = false;
+            for (var i = 0; i < number; i ++) {
+                bt('baidu-template', data);
+            }
+        }
+    }
+    
+];
+
+KISSY.use('template',function(S,T) {
+    testList.push({
+        name: 'kissyTemplate',
+        tester: function () {
+            var source= document.getElementById('kissy').innerHTML;
+
+            for (var i = 0; i < number; i ++) {
+                T(source).render(data);
+            }
+        }
+    });
+});
+
+var data = {
+    list: []
+};
+
+var retest = [].concat(testList);
+var recolor = Highcharts.getOptions().colors;
+
+!function(){
+    var testss = '';
+    for (var i = 0; i < testList.length; i ++) {
+        testss += testList[i].name + '; ';
+    }
+    $('#log').text('等待被测试的引擎：'+ testss);
+}();
+
+var run = function(){
+    // 数据量
+    window.length = $('#lens').val()|0;
+    // 渲染次数
+    window.number = $('#nums').val()|0;
+
+    if(data.list !== length){
+        data.list = [];
+        for (var i = 0; i < length; i ++) {
+            data.list.push({
+                index: i,
+                user: '<strong style="color:red">糖饼</strong>',
+                site: 'http://www.planeart.cn',
+                weibo: 'http://weibo.com/planeart',
+                QQweibo: 'http://t.qq.com/tangbin'  
+            }); 
+        };
+    }
+    
+    return function () {
+        var Timer = function (){
+            this.startTime = + new Date;
+        };
+
+        Timer.prototype.stop = function(){
+            return + new Date - this.startTime;
+        };
+        
+        var colors = [].concat(recolor);
+        var categories = [];
+
+        for (var i = 0; i < testList.length; i ++) {
+            categories.push(testList[i].name);
+        }
+
+        var chart = new Highcharts.Chart({
+            chart: {
+                renderTo: 'container',
+                height: categories.length * 40,
+                type: 'bar'
+            },
+
+            title: {
+                text: 'JavaScript 模板引擎负荷测试'
+            },
+
+            subtitle: {
+                text: length + ' 条数据 × ' + number + ' 次渲染'
+            },
+                    
+            xAxis: {
+                categories: categories,
+                labels: {
+                    align: 'right',
+                    style: {
+                        fontSize: '12px',
+                        fontFamily: 'Verdana, sans-serif'
+                    }
+                }
+            },
+
+            yAxis: {
+                min: 0,
+                title: {
+                    text: '耗时(毫秒)'
+                }
+            },
+
+            legend: {
+                enabled: false
+            },
+
+            tooltip: {
+                formatter: function() {
+                    return '<b>'+ this.x +'</b><br/>'+
+                        this.y + '毫秒';
+                }
+
+            },
+
+            credits: {
+                enabled: false
+            },
+            plotOptions: {
+                bar: {
+                    dataLabels: {
+                        enabled: true,
+                        formatter: function () {
+                            return this.y + 'ms';
+                        }
+                    }
+                }
+            },
+            series: [{
+                data : []
+            }]
+
+        });
+        
+        var log = function (message) {
+            document.getElementById('log').innerHTML = message;
+        };
+        
+        var tester = function (target) {
+        
+            
+            var time = new Timer;
+            target.tester();
+            var endTime = time.stop();
+            
+            chart.series[0].addPoint({
+                color: colors.shift(),
+                y: endTime
+            });
+            
+            
+            if (!testList.length) {
+                log('测试已完成，请不要过分迷恋速度');
+                
+                testList = [].concat(retest);
+                $('#run').show().text('再测一遍');
+                
+                return;
+            }
+
+            target = testList.shift();
+            
+            log('正在测试: ' + target.name + '..');
+            
+            setTimeout(function () {
+                tester(target);
+            }, 500);
+            
+        };
+        
+        var target = testList.shift();
+        log('正在测试: ' + target.name + '..');
+        tester(target);
+
+    };
+}
+</script>
+
+
+<!-- laytpl 的模板 -->
+<script id="laytpl" type="text/tmpl">
+<ul>
+    {{# for (var i = 0, l = d.list.length; i < l; i ++) { }}
+        <li>用户: {{ d.list[i].user }}/ 网站：{{ d.list[i].site }}</li>
+    {{# } }}
+</ul>
+</script>
+
+
+<!-- artTemplate 的模板 -->
+<script id="template" type="text/tmpl">
+<ul>
+    <% for (var i = 0, l = list.length; i < l; i ++) { %>
+        <li>用户: <%=#list[i].user%>/ 网站：<%=#list[i].site%></li>
+    <% } %>
+</ul>
+</script>
+
+<!-- baidu-template 的模板 -->
+<script id="baidu-template" type="text/tmpl">
+<ul>
+    <% for (var val, i = 0, l = list.length; i < l; i ++) { %>
+        <% val = list[i]; %>
+        <li>用户: <%:=val.user%>/ 网站：<%:=val.site%></li>
+    <% } %>
+</ul>
+</script>
+
+
+<!--Mustache 的模板 -->
+<script id="Mustache" type="text/tmpl">
+<ul>
+    {{#list}}
+        <li>用户: {{{user}}}/ 网站：{{{site}}}</li>
+    {{/list}}
+</ul>
+</script>
+
+
+<!--juicer 的模板 -->
+<script id="juicer" type="text/tmpl">
+<ul>
+    {@each list as val}
+        <li>用户: $${val.user}/ 网站：$${val.site}</li>
+    {@/each}
+</ul>
+</script>
+
+<!-- doT 的模板 -->
+<script id="doT" type="text/tmpl">
+<ul>
+    {{ for (var val, i = 0, l = it.list.length; i < l; i ++) { }}
+        {{ val = it.list; }}
+        <li>用户: {{=val[i].user}}/ 网站：{{=val[i].site}}</li>
+    {{ } }}
+</ul>
+</script>
+
+<!--Handlebars  的模板 -->
+<script id="Handlebars" type="text/tmpl">
+<ul>
+    {{#list}}
+        <li>用户: {{{user}}}/ 网站：{{{site}}}</li>
+    {{/list}}
+</ul>
+</script>
+
+<!--kissy 的模板 -->
+<script id="kissy" type="text/tmpl">
+<ul>
+    {{#each list as val}}
+        <li>用户: {{val.user}}/ 网站：{{val.site}}</li>
+    {{/each}}
+</ul>
+</script>
+
+<script>
+$('#run').on('click', function(){
+    $(this).hide();
+    run()();
+});
+</script>
+<script src="http://sentsin.com/layui/laytpl/demo.js"></script>
+</body>
+</html>
