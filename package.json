@@ -1,0 +1,13 @@
+{
+  "name": "bt",
+  "version": "1.0.0",
+  "description": "极简极致的 JavaScript 模板引擎",
+  "main": "src/bt.js",
+  "author": "楼教主",
+  "license": "MIT",
+  "devDependencies": {
+    "gulp": "^3.9.0",
+    "gulp-rename": "^1.2.2",
+    "gulp-uglify": "^1.2.0"
+  }
+}
