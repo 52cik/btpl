@@ -15,19 +15,18 @@
 <h1>{{d.title}}</h1>
 <p>{{d.desc || "暂无描述"}}</p>
 <ul>
-    {{@ d.list}} <!-- 默认迭代值为 val 当前值索引默认为 i -->
+    {{@ d.list value}}
     <li>
-        <span>{{i}}</span>
-        <span>昵称: {{val.name}}</span>
-        <span>城市: {{val.city}}</span>
-        <span>职位: {{val.post}}</span>
+        <span>昵称: {{value.name}}</span>
+        <span>城市: {{value.city}}</span>
+        <span>职位: {{value.post}}</span>
     </li>
     {{@}}
 </ul>
 </script>
 
 
-<script src="../bt.js"></script>
+<script src="../src/bt.js"></script>
 <script>
 var data = {
     title: "前端屌丝群成员",
@@ -40,7 +39,6 @@ var data = {
         {name: "龙秋明",     city: "北京", post: "前端"},
         {name: "小麒麟",     city: "北京", post: "前端"},
         {name: "秋天的落叶", city: "广东", post: "前端"}
-        
     ]
 };
 

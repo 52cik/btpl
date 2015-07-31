@@ -15,7 +15,7 @@
 <h1>{{d.title}}</h1>
 <p>{{d.desc || "暂无描述"}}</p>
 <ul>
-    {{@ d.list v}} <!-- 指定迭代值为 v 当前值索引默认为 i -->
+    {{@ d.list v i}} <!-- 指定迭代值为 v 当前值索引默认为 i -->
     <li>
         <span>{{i}}</span>
         <span>昵称: {{v.name}}</span>
@@ -27,7 +27,7 @@
 </script>
 
 
-<script src="../bt.js"></script>
+<script src="../src/bt.js"></script>
 <script>
 var data = {
     title: "前端屌丝群成员",

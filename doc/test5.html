@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
@@ -12,18 +13,18 @@
 <div id="view"></div>
 
 <script id="list" type="text/tpl">
-<h1>{{d.title}}</h1>
-<p>{{d.desc || "暂无描述"}}</p>
+<h1><%it.title%></h1>
+<p><%it.desc || "暂无描述"%></p>
 <ul>
-    {{@ d.list val i}}
+    <%@ it.list val i%>
     <li>
-        <span>{{i}}</span>
-        <span>昵称: {{val.name|test}}</span>
-        <span>城市: {{val.city}}</span>
-        <span>职位: {{val.post}}</span>
-        <span>时间: {{val.time | date:"yyyy-MM-dd" | test}}</span>
+        <span><%i%></span>
+        <span>昵称: <%val.name|test%></span>
+        <span>城市: <%val.city%></span>
+        <span>职位: <%val.post%></span>
+        <span>时间: <%val.time | date:"yyyy-MM-dd" | test%></span>
     </li>
-    {{@}}
+    <%@%>
 </ul>
 </script>
 
@@ -50,6 +51,14 @@ var data = {
 // 为字符加上中括号
 bt.filter("test", function (str) {
     return "[" + str + "]";
+});
+
+/** 修改默认配置 */
+bt.config({
+    begin   : "<%", // 模板起始标签
+    end     : "%>", // 模板闭合标签
+    varname : "it", // 对象替换符
+    strip   : false // 保留空白字符
 });
 
 // 得到模版

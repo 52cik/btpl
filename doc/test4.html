@@ -15,7 +15,7 @@
 <h1>{{d.title}}</h1>
 <p>{{d.desc || "暂无描述"}}</p>
 <ul>
-    {{@ d.list}}
+    {{@ d.list val i}}
     <li>
         <span>{{i}}</span>
         <span>昵称: {{val.name}}</span>
@@ -35,7 +35,8 @@
 </script>
 
 
-<script src="../bt.js"></script>
+<script src="../src/bt.ext.js"></script>
+<script src="../src/filters.js"></script>
 <script>
 var data = {
     title: "前端屌丝群成员",

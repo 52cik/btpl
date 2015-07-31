@@ -16,18 +16,32 @@
 <p>输出数组(直接输出)：{{ d.list }}</p>
 <p>输出数组(迭代输出)：{{@ d.list v}} <em>{{v}}</em> {{@}}</p>
 <p>输出默认值: {{ d.abc || "该值不存在，我是默认值" }}</p>
+<p>过滤器测试1: {{ d.filter | test }}</p>
+<p>过滤器测试2: {{ d.filter | test:"\{\{" }}</p>
+<p>过滤器测试3: {{ d.filter | test:"\{\{", "\}\}" }} (模板标签内使用模板标签要转义下哦)</p>
+<p>过滤器测试4: {{ d.filter1 }}</p>
+<p>过滤器测试5: {{ d.filter1 | uppercase }}</p>
+<p>过滤器测试6: {{ d.filter1 | lowercase }}</p>
+<p>过滤器测试7: {{ d.filter2 | date:"yyyy-MM-dd"}}</p>
 </script>
 
-<script src="../bt.js"></script>
+<script src="../src/bt.ext.js"></script>
+<script src="../src/filters.js"></script>
 <script>
 var data = {
     str: "字符串数据",
     num: 123456,
     html: "<u>html代码</u> <em>em</em>",
-    list: [1,2,3,4, "字符"]
+    list: [1,2,3,4, "字符"],
+	filter: "过滤器测试",
+	filter1: "abcDEF",
+	filter2: 1438214400
 };
-
-bt.filter("test", function (s) { return s});
+/** 使用过滤器功能，请调用扩展版 **/
+// 添加自定义过滤器
+bt.filter("test", function (str, a, b) {
+	return (a || "[") + str + (b || "]");
+});
 
 // 得到模版
 var tpl = document.getElementById("tpl").innerHTML;

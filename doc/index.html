@@ -2,33 +2,356 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <title>bt模版引擎测试例子</title>
+    <title>bT.js - 极简极致的JavaScript模板引擎</title>
     <style>
-    *{margin: 0; padding: 0; font-size: 12px}
-    body{margin: 40px;background-color: #f4f4f4;color:#555;}
-    h1 {font-size: 20px}
-    .list{margin: 30px; line-height:2em;}
-    ol {margin-left: 2em;}
+    body{margin:0 auto;padding:20px;max-width:800px;background-color:#f4f4f4;color:#555;font-weight:200;font-size:14px;font-family:Helvetica Neue,arial,verdana}
+    h2{margin-top:60px;text-shadow:0 1px 2px #fff}
+    h2 span{font-weight:200;font-size:14px}
+    a{color:#2B80FF}
+    h4{margin:4px 0;font-weight:400;font-size:20px}
+    pre{padding:.5em 1em;border-radius:3px;background-color:#ddd}
+    ol,ul,pre{line-height:1.5}
+    b{font-size:12px}
+    blockquote{padding:0 15px;margin:0;color:#777;border-left:4px solid #ddd}
+    textarea{padding:10px;width:96%;height:210px;outline:0;border:1px solid #d3d3d3;text-align:left;font-size:14px}
+    .datagroup,.functiongroup,.resultgroup,.templategroup{float:left;margin:4px 2% 4px 0;width:48%;min-width:300px}
+    .function,.result{overflow-y:auto;padding:10px;height:212px;background:#DDD;font-size:14px}
+    .smaller{font-size:.8em}
+    #github{position:absolute;top:0;left:0;border:0}
+    #logo{display:block;margin:0 auto;width:200px;height:200px}
+    .desc{margin-bottom:60px;text-align:center}
+    .test{width:100%}
+    #sampletabs{margin:0;padding:0;list-style:none}
+    #sampletabs li{float:left;margin:4px;padding:4px 8px;background:#DDD;cursor:pointer}
+    #sampletabs li.active{background:#2B80FF;color:#FFF}
+    .stripgroup{float:left;padding-top:8px;width:160px}
     </style>
+    <base target="_blank">
 </head>
 <body>
-    <h1>bt模版引擎测试例子</h1>
-    <ol class="list">
-        <li><a href="test.html">模版性能对比测试</a></li>
-        <li><a href="test1.html">基础语法测试</a></li>
-        <li>
-            <a href="test2.html">循环输出</a>
-            <ol>
-                <li><a href="test2-1.html">迭代器的使用</a></li>
-                <li><a href="test2-2.html">迭代器的使用 - 指定值名称</a></li>
-                <li><a href="test2-3.html">迭代器的使用 - 指定索引名称</a></li>
-            </ol>
-        </li>
-        <li><a href="test3.html">过滤器的使用</a></li>
-        <li><a href="test4.html">过滤器技巧当作组件使用</a></li>
-    </ol>
+<a id="github" href="//github.com/52cik/btpl"><img src="img/forgithub.png" alt="Fork me on GitHub"></a>
+<img id="logo" src="img/logo.png" alt="bT.js">
 
-	回到GitHub:
-    <a href="https://github.com/52cik/btpl">https://github.com/52cik/btpl</a>
+<h2 class="desc">极简极致的JavaScript模板引擎</h2>
+
+<h2>简要</h2>
+<p>bt 模版引擎立志成为极简极致的模版引擎，bt 对于性能的追求到达极致，几乎超越市面上已有的任何模版引擎。bt 引擎采用惰性函数模式，让模版性能更是到达巅峰。经过极端的压力测试，性能与 laytpl, doT, artTemplate 并驾齐驱，更是比其他引擎快了20-40倍不止。(<a href="test.html">性能测试</a>)</p>
+
+<p>语法方面，除了几个特定的符号，其他代码可以直接用原生js语法书写 (Native JavaScript) 让您的学习成本降低到几乎为零。</p>
+
+<p>
+在 1.3 以后的版本，更是添加了数组迭代和过滤器的功能，让您能更加方便的渲染数据。
+<br>
+从 1.4 版本开始，分为 极致版(v1.x) 和 扩展版(v2.x) 两个版本，版本号 1.x 为极致版，2.x 为扩展版。
+</p>
+
+<h3>文件说明</h3>
+<ul>
+    <li><a href="../src/bt.js">bt.js</a> - 极致版</li>
+    <li><a href="../src/bt.ext.js">bt.ext.js</a> - 扩展版</li>
+    <li><a href="../src/filters.js">filters.js</a> - 过滤器 (配合 扩展版 使用)</li>
+</ul>
+<p>极致版不包含过滤器，后期不再扩展功能。扩展版包含过滤器功能，但要配合过滤器文件使用。</p>
+
+<h2>源码</h2>
+<p>开源协议 MIT <a href="https://github.com/52cik/btpl">github.com/52cik/btpl</a></p>
+
+<h2>优势</h2>
+<ol>
+    <li>没有依赖第三方库，原生js (Native JavaScript) 实现</li>
+    <li>性能卓绝，与 laytpl, doT, artTemplate 并驾齐驱，比baiduTemplate、kissyTemplate等快20-40倍</li>
+    <li>具备转义等安全机制，较科学的报错功能</li>
+    <li>具备数组迭代，可以简单方便的输出数组内容</li>
+    <li>具备过滤器，轻而易举的处理您输出的数据</li>
+    <li>空白符号可控，可以通过参数strip忽略或保留空白</li>
+    <li>模版中可任意书写Native JavaScript，充分确保模版的灵活度</li>
+    <li>支持应用在Node.js平台</li>
+    <li>支持所有浏览器，包括 IE6+</li>
+</ol>
+
+<p><img class="test" src="img/test.png" alt="性能参数"></p>
+
+<h2>使用 <span>修改编辑框里的模版和数据即可显示结果</span></h2>
+<div id="samples">
+    <ul id="sampletabs"></ul>
+    <div class="stripgroup">
+        <input id="strip" type="checkbox" checked="checked"/>
+        <label for="strip">忽略空白字符[\r\n\t ]</label>
+    </div>
+    <div style="clear:both;height:10px"></div>
+    <div class="templategroup">
+        <h4>模板</h4>
+        <textarea autocomplete="off" class="template"></textarea>
+    </div>
+    <div class="functiongroup">
+        <h4>模板编译结果</h4>
+        <div class="function"></div>
+    </div>
+    <div style="clear:both"></div>
+    <div class="datagroup">
+        <h4>数据</h4>
+        <textarea autocomplete="off" class="data"></textarea>
+    </div>
+    <div class="resultgroup">
+        <h4>数据渲染结果</h4>
+        <div class="result"></div>
+    </div>
+</div>
+
+<br style="clear:both">
+
+<h2>快速上手</h2>
+<p>1. 在你的html中引入 bt.js 或者 bt.min.js 文件</p>
+<pre><code>&lt;script type="text/javascript" src="bt.min.js"&gt;&lt;/script&gt;</code></pre>
+
+<p>2. 准备数据，例如你有以下数据：</p>
+<pre><code>var data = {
+    title: '前端圈',
+    intro: '一群码js的骚年，幻想改变世界，却被世界改变。',
+    list: [
+        {name: '贤心', city: '杭州'},
+        {name: '乱码', city: '杭州'},
+        {name: '谢亮', city: '北京'},
+        {name: '浅浅', city: '杭州'},
+        {name: 'Dem', city: '北京'}
+    ]
+};</code></pre>
+
+<p>3. 根据数据编写你的模版</p>
+<pre><code>&lt;h3&gt;{{ d.title }}&lt;/h3&gt;
+&lt;p class="intro"&gt;{{ d.intro }}&lt;/p&gt;
+&lt;ul&gt;
+{{# for(var i = 0, len = d.list.length; i &lt; len; i++){ }}
+    &lt;li&gt;
+        &lt;span&gt;{{ d.list[i].name }}&lt;/span&gt;
+        &lt;span&gt;所在城市：{{ d.list[i].city }}&lt;/span&gt;
+    &lt;/li&gt;
+{{# } }}
+&lt;/ul&gt;</code></pre>
+
+<p>4. ok 完成了。</p>
+
+<h2>查看更多例子</h2>
+<b>打开例子后，请右击查看源码。</b>
+<ol class="list">
+    <li><a href="test.html">模版性能对比测试</a></li>
+    <li><a href="test1.html">基础语法测试</a></li>
+    <li>
+        <a href="test2.html">循环输出</a>
+        <ol>
+            <li><a href="test2-1.html">迭代器的使用 - 指定值名称</a></li>
+            <li><a href="test2-2.html">迭代器的使用 - 指定索引名称</a></li>
+        </ol>
+    </li>
+    <li><a href="test3.html">过滤器的使用</a></li>
+    <li><a href="test4.html">过滤器技巧当作组件使用</a></li>
+    <li><a href="test5.html">修改默认配置</a></li>
+</ol>
+
+
+<h2>API 文档</h2>
+<h3>模版标签语法</h3>
+<pre><code>{{ }}   输出一个普通字段 (别名 插值表达式)
+{{= }}  输出一个实体转码后的字段
+{{# }}  JavaScript脚本
+{{@ }}  迭代标签</code></pre>
+<blockquote>
+<p>PS: 要注意操作符的符号不能和 {{ 直接有空格，</p>
+<p>比如 {{ = d.text }} 这样是错误的，一定要写成 {{= d.text }} 才对，</p>
+<p>操作符后面的空格随意，闭合标签 }} 前面的空格也随意，</p>
+<p>所以你可以 {{= &nbsp; &nbsp; d.text &nbsp; &nbsp; }} 这样写也是没问题的。</p>
+</blockquote>
+
+<h3>模版引擎 api</h3>
+<pre><code>/**
+ * 核心函数
+ * @param {string} tpl 模板数据
+ * @param  {object} options [可选] 配置参数 (详见下面 修改引擎配置 部分)
+ * @return {object} 返回模版引擎对象
+ */
+bt(tpl, options);
+
+
+// 先用 var tpl = bt(tpl); 得到模版引擎对象后
+/**
+ * 渲染数据，生成最终展示的html代码
+ * @param  {object} data 待渲染的数据
+ * @return {string}      渲染后的html
+ */
+tpl.render(data);
+
+
+/**
+ * 修改引擎配置
+ * @param  {object}
+ */
+bt.config(options);
+// options 配置参数如下
+{
+    begin: "{{",  // 模板起始标签
+    end: "}}",    // 模板闭合标签
+    varname: "d", // 对象替换符
+    strip: true   // 忽略空白符
+}
+
+
+/**
+ * 得到版本号
+ * @type {number}
+ */
+bt.ver;
+
+
+/** 以下是拓展版功能 **/
+/**
+ * 注册过滤器
+ * @param  {string}   name     过滤器名
+ * @param  {function} callback 回调函数
+ */
+bt.filter = function (name, callback);
+// 在 filters.js 文件中有几个默认过滤器例子，你也可以在 filters.js 文件中添加自己的过滤器
+</code></pre>
+
+<h2>更新日志</h2>
+<ul>
+    <li>[v2.0] 2015-07-31 修改引擎 - 扩展版，包含过滤功能，以及基础过滤器</li>
+    <li>[v1.4] 2015-07-31 修改引擎 - 极致版，不包括过滤器</li>
+    <li>[v1.3] 2015-06-30 结构调整，加入数组迭代和过滤器功能</li>
+    <li>[v1.2] 没有1.2，因为功合并到1.3同时发布了</li>
+    <li>[v1.1] 2015-06-29 优化代码，添加多平台支持</li>
+    <li>[v1.0] 2015-06-17 第一版本发布</li>
+</ul>
+
+
+<div style="margin:60px 0;text-align:center;font-size:16px;">
+    <strong>作者很懒，直接扒了 doT.js 的 logo 和页面，不过意思到位即可。^_^</strong>
+</div>
+
+
+<script src="jquery.js"></script>
+<script src="../src/bt.ext.js"></script>
+<script src="../src/filters.js"></script>
+<script>
+(function() {
+    var encodeHTML = function() {
+            var encodeHTMLRules = { "&": "&#38;", "<": "&#60;", ">": "&#62;", '"': "&#34;", "'": "&#39;", "/": "&#47;" },
+                matchHTML = /&(?!#?\w+;)|<|>|"|'|\//g;
+            return function(code) {
+                return code ? code.toString().replace(matchHTML, function(m) {return encodeHTMLRules[m] || m;}) : "";
+            };
+        }(),
+        samples = {
+            'interpolation': {
+                name: "插值表达式",
+                template: "<div>Hi {{d.name}}!</div>\n<div>{{d.age || \"\"}}</div><div>{{d.desc || \"家伙很懒，什么也没留下\"}}</div>",
+                data: {
+                    name: "张三",
+                    age: 25
+                }
+            },
+            'encode': {
+                name: "插值(转义)",
+                template: "Visit {{=d.uri}}",
+                data: {
+                    uri: "https://github.com/52cik/btpl"
+                }
+            },
+            'evaluation': {
+                name: "JS语句",
+                template: "{{#\nvar list = d.list;\nfor(var i=0; i<list.length; i++) { \n}}\n<div>{{i}}-{{list[i].name}}-{{list[i].city}}</div>\n{{# } }}",
+                data: {
+                    list: [
+                        {name: "乱码", city: "杭州", post: "前端"},
+                        {name: "冰花", city: "北京", post: "水军"},
+                        {name: "高琦", city: "福建", post: "水军"},
+                        {name: "银狐", city: "汕头", post: "前端"}
+                    ]
+                }
+            },
+            'arrays': {
+                name: "迭代器",
+                template: "{{@ d.array value index}}\n<div>{{index}} - {{=value}}!</div>\n{{@}}",
+                data: {
+                    array: ["banana", "apple", "orange"]
+                }
+            },
+            'filters': {
+                name: "过滤器",
+                template: "<p>时间戳: {{ d.date | date:\"yyyy-MM-dd\" }}</p>\n<p>大写转换: {{ d.str | uppercase }}</p>\n<p>小写转换: {{ d.str | lowercase }}</p>",
+                data: {
+                    date: "1438300800",
+                    str: "abcEDF - 123456"
+                }
+            }
+        };
+
+    var $tabs = $('#sampletabs'), // tab 按钮
+        $result = $('#samples .result'), // 结果
+        $function = $('#samples .function'), // 编译结果
+        $template = $('#samples .template'), // 模板
+        $data = $('#samples .data'), // 数据
+        data = {},
+        def, fn;
+
+    function onTemplate(tmpl) {
+        var text, error;
+        try {
+            fn = text = bt(tmpl).render;
+        } catch (e) {
+            fn = undefined;
+            error = text = "模板编译错误: " + e;
+        }
+
+        $function.html(encodeHTML(text));
+        $result.html(error ? "无法渲染模板" : encodeHTML(fn(data)).replace(/\n/g, "<br/>"));
+    }
+
+    function newSample(s) {
+        $('ul .active').removeClass("active");
+        $("#x" + s).addClass("active");
+        var sample = samples[s];
+        data = $.extend({}, sample.data);
+
+        $template.val(sample.template);
+        $data.val(JSON.stringify(sample.data));
+
+        onTemplate(sample.template);
+    }
+
+    $template.keyup(function() {
+        onTemplate(this.value);
+    });
+
+    $data.keyup(function() {
+        var error;
+        try {
+            eval("data=(" + this.value + ")");
+        } catch (e) {
+            data = {};
+            error = "Data error: " + e;
+        }
+        $result.html(error ? "无法渲染数据" : encodeHTML(fn(data)).replace(/\n/g, "<br/>"));
+    });
+
+    $('#strip').change(function() {
+        bt.config({strip: this.checked});
+        onTemplate($template.val());
+    });
+
+    $tabs.click(function(event) {
+        newSample(event.target.id.substring(1));
+    });
+
+    var tmp = '';
+    for (var s in samples) {
+        if (samples.hasOwnProperty(s)) {
+            tmp += "<li id='x" + s + "'>" + samples[s].name + "</li>";
+        }
+    }
+    $tabs.html(tmp);
+
+    newSample('interpolation');
+}());
+</script>
 </body>
 </html>
