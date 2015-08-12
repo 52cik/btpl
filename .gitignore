@@ -1,0 +1,10 @@
+!.gitignore
+# node modules
+/node_modules
+
+# windows thumbnail cache
+Thumbs.db
+Desktop.ini
+
+# Mac DS_Store Files
+.DS_Store

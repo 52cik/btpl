@@ -2,7 +2,7 @@
  * @name bt v2.0 - 极简极致的JavaScript模板引擎 (扩展版)
  * @author: 楼教主
  * @date: 2015-07-31
- * @site: https://github.com/52cik/btpl
+ * @site: http://52cik.github.io/btpl/index.html
  * @license: MIT license
  */
 
@@ -114,7 +114,7 @@
 				.replace(/(^|[^\\])\\n/g, "$1\n")
 				.replace(/(^|[^\\])\\t/g, "$1\t"))
                 .replace(/^\s+|\s+$/g, "")
-                .replace(/\\\\/g, "\\")
+                .replace(/\\('|\\)/g, "$1");
 				
 				
                 if ("" === type && "" === code) { // 不处理

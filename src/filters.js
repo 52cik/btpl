@@ -2,7 +2,7 @@
  * @name filters v1.0 过滤器文件，只能配合扩展版使用
  * @author: 楼教主
  * @date: 2015-07-31
- * @site: https://github.com/52cik/btpl
+ * @site: http://52cik.github.io/btpl/index.html
  * @license: MIT license
  */
 (function (filter) {
