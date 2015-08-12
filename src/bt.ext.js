@@ -110,13 +110,13 @@
             .replace(/\t/g, "\\t"))
             .replace(REG_BLOCK, function (m, type, code) {
                 code = (conf.strip ? code : code
-				.replace(/(^|[^\\])\\r/g, "$1\r")
-				.replace(/(^|[^\\])\\n/g, "$1\n")
-				.replace(/(^|[^\\])\\t/g, "$1\t"))
+                .replace(/(^|[^\\])\\r/g, "$1\r")
+                .replace(/(^|[^\\])\\n/g, "$1\n")
+                .replace(/(^|[^\\])\\t/g, "$1\t"))
                 .replace(/^\s+|\s+$/g, "")
                 .replace(/\\('|\\)/g, "$1");
-				
-				
+                
+                
                 if ("" === type && "" === code) { // 不处理
                     return m;
                 }
@@ -189,7 +189,7 @@
         global.bt = btpl;
     }
 
-	
+    
     /**
      * 过滤器模块
      * @type {object} 过滤器缓存对象
