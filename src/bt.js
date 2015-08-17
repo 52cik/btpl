@@ -24,7 +24,7 @@
      * 构造函数
      * @param {string} tpl 模板数据
      */
-    function bt(tpl) {
+    function BT(tpl) {
         var self = this;
         self.tpl = tpl;
         self.parse();
@@ -35,7 +35,7 @@
      * 原型链
      * @type {object}
      */
-    var fn = bt.prototype = {
+    var fn = BT.prototype = {
         conf: {
             begin: "{{", // 模板起始标签
             end: "}}", // 模板闭合标签
@@ -46,8 +46,9 @@
 
     /**
      * 生成正则 (提升正则性能)
-     * @param  {string}
-     * @return {regexp}
+     * @param {string} re 正则字符串
+     * @param {string} opt 正则修饰符
+     * @returns {RegExp}
      */
     function exp(re, opt) {
         return new RegExp(re, opt || "g");
@@ -58,13 +59,13 @@
 
     /**
      * HTML实体转义
-     * @param  {string} 要转义的html
+     * @param  {string} html 要转义的html
      * @return {string} 转义后的html
      */
     fn.encode = function (html) {
         return String(html || '')
             .replace(/&(?!#?[a-zA-Z0-9]+;)/g, '&amp;')
-            .replace(/[<>"'\/]/g, function (k) { return ENTITIES[k] });
+            .replace(/[<>"'\/]/g, function (k) { return ENTITIES[k]; });
     };
 
     var syntax = fn.syntax = {
@@ -79,8 +80,9 @@
                 return "';}out+='";
             }
 
-            var m, sid = this.sid++;
-            if (m = str.match(/\s*([\w."'\][]+)\s*(\w+)\s*(\w+)?/)) {
+            var m = str.match(/\s*([\w."'\][]+)\s*(\w+)\s*(\w+)?/),
+                sid = this.sid++;
+            if (m) {
                 var index = m[3] || ("ai" + sid), // 索引
                     value = m[2] || ("av" + sid), // 值
                     length = "al" + sid,
@@ -100,7 +102,7 @@
     fn.parse = function () {
         var self = this;
         var conf = fn.conf, begin = conf.begin, end = conf.end;
-        var REG_BLOCK = exp(begin + "([#=@]|)([\\s\\S]*?|)" + end);
+        var REG_BLOCK = exp(begin + "([#=@]|)([\\s\\S]*?|)" + end, "g");
         self.sid = 1; // 迭代变量计次，防止冲突
 
         var tpl = self.tpl.replace(/'|\\/g, "\\$&");
@@ -135,22 +137,24 @@
             
             var tpl_fnc = self.render = function (data) {
                 return fnc.call(self, data); // 指定模版 this 上下文为当前引擎
-            }
+            };
             
             tpl_fnc.toString = function () { // 输出模版函数
                 return fnc.toString();
-            }
+            };
             
             recompile = false; // 关闭重编译
             return tpl_fnc;
         } catch (e) {
             var error = "该模板不能创建渲染引擎";
-            undefined !== console && console.log(error + ": " + tpl);
+            if (global.console) {
+                console.log(error + ": " + tpl);
+            }
             // throw e;
-            return function () { return error } // 和谐处理错误
+            return function () { return error; }; // 和谐处理错误
         }
 
-    }
+    };
 
     /**
      * 对外公开的bt方法
@@ -159,8 +163,10 @@
      * @return {string} 渲染后的html
      */
     function btpl(tpl, options) {
-        options || btpl.config(options); // 修改配置
-        return recompile ? new bt(tpl) : cache[tpl] || new bt(tpl);
+        if (options) { // 修改配置
+            btpl.config(options);
+        }
+        return recompile ? new BT(tpl) : cache[tpl] || new BT(tpl);
     }
 
     btpl.ver = 1.4; // 版本号
@@ -174,7 +180,9 @@
 
         options = options || {};
         for(var key in options){
-            fn.conf[key] = options[key];
+            if (options.hasOwnProperty(key)) {
+                fn.conf[key] = options[key];
+            }
         }
     };
     
