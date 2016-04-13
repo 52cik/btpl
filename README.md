@@ -1,4 +1,5 @@
 ## 简要
+
 bt 模版引擎立志成为极简极致的模版引擎，bt 对于性能的追求到达极致，几乎超越市面上已有的任何模版引擎。bt 引擎采用惰性函数模式，让模版性能更是到达巅峰。经过极端的压力测试，性能与 laytpl, doT, artTemplate 并驾齐驱，更是比其他引擎快了20-40倍不止。([性能测试](http://52cik.github.io/btpl/doc/test.html))
 
 语法方面，除了几个特定的符号，其他代码可以直接用原生js语法书写 (Native JavaScript) 让您的学习成本降低到几乎为零。
@@ -16,7 +17,9 @@ bt 模版引擎立志成为极简极致的模版引擎，bt 对于性能的追�
 
 [查看详细例子](http://52cik.github.io/btpl/)
 
+
 ## 优势
+
 1. 没有依赖第三方库，原生js (Native JavaScript) 实现
 2. 性能卓绝，与 laytpl, doT, artTemplate 并驾齐驱，比baiduTemplate、kissyTemplate等快20-40倍
 3. 具备转义等安全机制，较科学的报错功能
@@ -30,6 +33,7 @@ bt 模版引擎立志成为极简极致的模版引擎，bt 对于性能的追�
 ![性能压力测试图](https://52cik.github.io/btpl/doc/img/test.png "性能压力测试图")
 
 ## 更新日志
+
 ```
 [v2.0] 2015-07-31 修改引擎 - 扩展版，包含过滤功能，以及基础过滤器
 
@@ -41,6 +45,7 @@ bt 模版引擎立志成为极简极致的模版引擎，bt 对于性能的追�
 ```
 
 ## 快速上手
+
 1 在你的html中引入 bt.js 或者 bt.min.js 文件
 ```html
 <script type="text/javascript" src="bt.min.js"></script>
@@ -77,8 +82,11 @@ var data = {
 
 4 ok 完成了。[查看详细例子](http://52cik.github.io/btpl/)
 
+
 ## API
+
 ### 配置
+
 ```js
 /**
  * 核心函数
@@ -131,7 +139,9 @@ bt.filter = function (name, callback);
 
 [查看详细例子](http://52cik.github.io/btpl/)
 
+
 ## 模版标签语法
+
 ```
 {{ }}	输出一个普通字段 (别名 插值表达式)
 {{= }}	输出一个实体转码后的字段
