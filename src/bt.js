@@ -1,5 +1,5 @@
 /**
- * @name bt v1.4 - 极简极致的JavaScript模板引擎
+ * @name bt v1.4.1 - 极简极致的JavaScript模板引擎
  * @author: 楼教主
  * @date: 2015-07-31
  * @site: http://52cik.github.io/btpl/index.html
@@ -166,10 +166,12 @@
         if (options) { // 修改配置
             btpl.config(options);
         }
+        
+        tpl = String(tpl); // 转字符串，防止渲染错误
         return recompile ? new BT(tpl) : cache[tpl] || new BT(tpl);
     }
 
-    btpl.ver = 1.4; // 版本号
+    btpl.ver = '1.4.1'; // 版本号
 
     /**
      * 配置
