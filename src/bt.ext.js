@@ -88,7 +88,7 @@
                     length = "al" + sid,
                     arr_name = "arr" + sid;
 
-                str = "';var " + arr_name + "=" + m[1] + "," + index + "=-1," + length + "=" + arr_name + ".length-1," + value + 
+                str = "';var " + arr_name + "=" + m[1] + "," + index + "=-1," + length + "=" + arr_name + ".length-1," + value +
                       ";while(" + index + "<" + length + "){" + value + "=" + arr_name + "[" + index + "+=1];out+='";
             }
             return str;
@@ -117,8 +117,8 @@
                 .replace(/(^|[^\\])\\t/g, "$1\t"))
                 .replace(/^\s+|\s+$/g, "")
                 .replace(/\\('|\\)/g, "$1");
-                
-                
+
+
                 if ("" === type && "" === code) { // 不处理
                     return m;
                 }
@@ -134,15 +134,15 @@
 
         try {
             var fnc = new Function(conf.varname, tpl);
-            
+
             var tpl_fnc = self.render = function (data) {
                 return fnc.call(self, data); // 指定模版 this 上下文为当前引擎
             };
-            
+
             tpl_fnc.toString = function () { // 输出模版函数
                 return fnc.toString();
             };
-            
+
             recompile = false; // 关闭重编译
             return tpl_fnc;
         } catch (e) {
@@ -166,7 +166,7 @@
         if (options) { // 修改配置
             btpl.config(options);
         }
-        
+
         tpl = String(tpl); // 转字符串，防止渲染错误
         return recompile ? new BT(tpl) : cache[tpl] || new BT(tpl);
     }
@@ -187,25 +187,25 @@
             }
         }
     };
-    
+
     /**
      * 多环境支持
      */
-    if ("function" === typeof define) { // AMD, CMD, CommonJS 环境
-        define(function () { return btpl; } );
-    } else if ("object" === typeof module && "object" === typeof module.exports) { // node io 等类似环境
+    if (typeof exports === 'object' && typeof module !== 'undefined') { // node io 等类似环境
         module.exports = btpl;
+    } else if (typeof define === 'function') { // AMD, CMD, CommonJS 环境
+        define(function () { return btpl; } );
     } else { // window 环境
         global.bt = btpl;
     }
 
-    
+
     /**
      * 过滤器模块
      * @type {object} 过滤器缓存对象
      */
     var filters = fn.filters = {};
-    
+
     /**
      * 注册过滤器
      * @param  {string}   name     过滤器名
@@ -240,7 +240,7 @@
                 }
             }
         }
-        
+
         return val.replace(/\t/g, "||");
     }
 })(this);
