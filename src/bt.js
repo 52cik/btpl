@@ -1,5 +1,5 @@
 /**
- * @name bt v1.4.1 - 极简极致的JavaScript模板引擎
+ * @name bt v1.4.2 - 极简极致的JavaScript模板引擎
  * @author: 楼教主
  * @date: 2015-07-31
  * @site: http://52cik.github.io/btpl/index.html
